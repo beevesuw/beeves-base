@@ -7,7 +7,7 @@
   "manifest_version": 2,
   "name": "beeves_base",
   "version": "1.0",
-  "permissions": ["notifications", "http://localhost:5000/*", "*://postman-echo.com/*", "webRequest", "<all_urls>", "https://speaktome-2.services.mozilla.com/"],
+  "permissions": ["notifications", "http://localhost:5000/*", "*://postman-echo.com/*", "webRequest", "<all_urls>", "https://speaktome-2.services.mozilla.com/", "storage"],
   "background": {
     "scripts": ["background.js", "speaktome.js"]
   },
