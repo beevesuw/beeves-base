@@ -1,11 +1,22 @@
-function log(message){
-  console.log("-----------------------");
-  console.log("beeves-base says:");
-  console.log(message);
-  console.log("-----------------------");
-}
+/*
+handles initialization for beeves compatible webextensions
+stores extension metadata (beeves.json) when the extension is loaded
+TODO: train the NLU backend for the current extension
+*/
 
-//this is terrible code, but it works
+//clears beeves metadata when beeves-base is loaded
+browser.runtime.onInstalled.addListener(function(){
+  let clearStorage = browser.storage.local.clear();
+});
+
+//registering metadata for new extenions and training the backend
+browser.runtime.onMessageExternal.addListener(function(message, sender){
+  //trainNLUBackend
+  updateBeevesMetadata(message, sender);
+  //flash 'new skill added' on agent
+});
+
+//metadata storage handler
 function updateBeevesMetadata(message, sender){
   browser.storage.local.get('beeves_metadata', function(beeves_metadata){
     beeves_metadata = beeves_metadata.beeves_metadata || beeves_metadata;
@@ -26,22 +37,5 @@ function printStorage(){
   });
 }
 
-function onMessageRecieved(message, sender){
-  //trainNLUBackend
-  updateBeevesMetadata(message, sender);
-  //flash 'new skill added' on agent
-}
+//TODO: promisified browser.storage.local.get to use within an async function
 
-browser.runtime.onMessageExternal.addListener(onMessageRecieved);
-
-browser.browserAction.onClicked.addListener(function(){
-  var createData = {
-    type: "detached_panel",
-    url: "test.html",
-    width: 250,
-    height: 250
-  };
-  var creating = browser.windows.create(createData);
-});
-
-var clearStorage = browser.storage.local.clear();
