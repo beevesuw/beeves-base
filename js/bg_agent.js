@@ -11,7 +11,11 @@
 browser.browserAction.onClicked.addListener(async function(){
   let sending = await browser.runtime.sendMessage(
     'extension@beeves.com',
-    {'ok':'ok'},
+    {
+      'type':'beevesRPC',
+      'functionName':'test',
+      'arguments':['data']
+    },
     {}
   );
   log(sending);
