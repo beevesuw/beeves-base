@@ -8,10 +8,12 @@
 //     var let = browser.windows.create(createData);
 //   });
 
-browser.browserAction.onClicked.addListener(function(){
-  let sending = browser.runtime.sendMessage(
+browser.browserAction.onClicked.addListener(async function(){
+  let sending = await browser.runtime.sendMessage(
     'extension@beeves.com',
     {'ok':'ok'},
     {}
   );
+  log(sending);
+
 });
