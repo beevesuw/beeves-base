@@ -9,7 +9,7 @@
   "version": "1.0",
   "permissions": ["notifications", "http://localhost:5000/*", "*://postman-echo.com/*", "webRequest", "<all_urls>", "https://speaktome-2.services.mozilla.com/", "storage"],
   "background": {
-    "scripts": ["./js/bg_agent.js", "./js/bg_init.js", "./js/bg_utils.js"]
+    "scripts": ["./js/bg_agent.js", "./js/bg_init.js", "./js/bg_utils.js", "./js/bg_invoker.js", "./js/bg_dispatcher.js"]
   },
   "icons": {
     "128": "run.png"

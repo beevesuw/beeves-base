@@ -60,5 +60,3 @@ async function hotwordMapper(hotword){
   let dict = await browser.storage.local.get(['beeves_hotwords']);
   return dict.beeves_hotwords[hotword];
 }
-
-async function commandDispatcher()

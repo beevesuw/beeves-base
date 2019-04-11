@@ -8,6 +8,10 @@
 //     var let = browser.windows.create(createData);
 //   });
 
-browser.browserAction.onClicked.addListener(async function(){
-  log(await hotwordMapper('arithmetic'));
+browser.browserAction.onClicked.addListener(function(){
+  let sending = browser.runtime.sendMessage(
+    'extension@beeves.com',
+    {'ok':'ok'},
+    {}
+  );
 });
