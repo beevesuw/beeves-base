@@ -9,15 +9,6 @@
 //   });
 
 browser.browserAction.onClicked.addListener(async function(){
-  let sending = await browser.runtime.sendMessage(
-    'extension@beeves.com',
-    {
-      'type':'beevesRPC',
-      'functionName':'test',
-      'arguments':['data']
-    },
-    {}
-  );
-  log(sending);
-
+  let result = await new BeevesRPC('extension@beeves.com', 'test', {'data':'data'}).execute();
 });
+
