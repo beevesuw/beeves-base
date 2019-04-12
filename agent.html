@@ -55,7 +55,9 @@ document.addEventListener('DOMContentLoaded', function() {
       results.forEach(function(result) {
         resultsView.innerHTML += '"' + result.text +
           '", confidence: ' + result.confidence + '<br>';
+        window.alert(result.text);
       });
+      
     }
     else if (msg.state == 'ready') {
       button.innerText = "Listen";
