@@ -19,9 +19,8 @@
       <h1>SpeakToMe - BEEVES</h1>
 
       <section>
-        <label>Click [listen] and start speaking...</label>
+        <label>Click [listen] or hit [ctrl + b]</label>
         <br><br>
-        <input placeholder="Type to test with voice synth" class="test" type="text"></input>
         <button id="mic">Listen</button>
       </section>
 
@@ -67,18 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Helper for speech synth
-  function say(text) {
-    return new Promise(function(resolve, reject) {
-      var synth = window.speechSynthesis;
-      var utterThis = new SpeechSynthesisUtterance(text);
-      utterThis.onend = function() {
-        resolve();
-      };
-      synth.speak(utterThis);
-    });
-  }
-
   function onMicClick() {
     // Manual stop by user
     if (button.listening) {
@@ -91,16 +78,15 @@ document.addEventListener('DOMContentLoaded', function() {
       stm.listen();
       button.innerText = "Stop Listening (or just stop speaking)";
       button.listening = true;
-      // testing
-      var testText = document.querySelector('.test').value;
-      if (testText) {
-        setTimeout(function() {
-          say(document.querySelector('.test').value);
-        }, 500);
-      }
     }
   }
   button.addEventListener('click', onMicClick);
+  function KeyPress(e) {
+      var evtobj = window.event? event : e
+      if (evtobj.keyCode == 66 && evtobj.ctrlKey) onMicClick();
+  }
+
+  document.onkeydown = KeyPress;
 
   async function sendText(text) {
     result = await browser.runtime.sendMessage({"text": text});
