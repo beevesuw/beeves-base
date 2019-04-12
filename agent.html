@@ -28,6 +28,8 @@
       <section>
         <div class="results">
         </div>
+        <div class="success">
+        </div>
       </section>
     </section>
 
@@ -55,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
       results.forEach(function(result) {
         resultsView.innerHTML += '"' + result.text +
           '", confidence: ' + result.confidence + '<br>';
-        window.alert(result.text);
+        sendText(result.text);
       });
       
     }
@@ -99,6 +101,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   button.addEventListener('click', onMicClick);
+
+  async function sendText(text) {
+    result = await browser.runtime.sendMessage({"text": text});
+    document.querySelector('.success').innerHTML=result;
+  }
 });
 </script>
 </body>

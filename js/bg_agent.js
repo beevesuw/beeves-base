@@ -8,8 +8,8 @@ browser.browserAction.onClicked.addListener(function(){
     var let = browser.windows.create(createData);
   });
 
-// browser.browserAction.onClicked.addListener(async function(){
-//   await new BeevesRPC('extension@beeves.com', 'add', {'n1':2, 'n2':3}).execute();
-//   await new BeevesRPC('extension@beeves.com', 'subtract', {'n1':4, 'n2':2}).execute();
-// });
+browser.browserAction.onClicked.addListener(async function(){
+  await new BeevesRPC('extension@beeves.com', 'add', {'n1':2, 'n2':3}).execute();
+  await new BeevesRPC('extension@beeves.com', 'subtract', {'n1':4, 'n2':2}).execute();
+});
 
