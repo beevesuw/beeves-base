@@ -12,7 +12,7 @@ function log(message){
   async function postData(endpoint, payload) {
     try {
       let res = await fetch(endpoint, {
-        method: 'post',
+        method: 'put',
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json'

@@ -1,3 +1,5 @@
+const postmanEndpoint = 'https://postman-echo.com/post';
+
 /**
  * handles initialization for beeves compatible webextensions
  * stores extension metadata (beeves.json) when the extension is loaded
@@ -15,18 +17,24 @@ browser.runtime.onInstalled.addListener(function(){
  * @description metadata storage handler, maintains objects corresponding to 
  * beeves.json files and hotword-extension mapping
  */
-browser.runtime.onMessageExternal.addListener(function(message, sender){
-  //trainNLUBackend
+browser.runtime.onMessageExternal.addListener(async function(message, sender){
   updateBeevesMetadata(message, sender);
+  await timeout(1000);
+  trainNLUBackend(sender);
   //flash 'new skill added' on agent
 });
+
+async function trainNLUBackend(sender){
+  let snipsfile = (await getBeevesMetadata(sender.id))['snips'];
+  let res = await postData(`http://localhost:8337/skill/${sender.id}`, snipsfile);
+}
 
 /** 
  * @description metadata storage handler, maintains objects corresponding to 
  * beeves.json files and hotword-extension mapping
  * @todo REFACTOR
  */
-function updateBeevesMetadata(message, sender){
+async function updateBeevesMetadata(message, sender){
   browser.storage.local.get('beeves_metadata', function(beeves_metadata){
     beeves_metadata = beeves_metadata.beeves_metadata || beeves_metadata;
     beeves_metadata[sender.id] = message;
@@ -37,6 +45,7 @@ function updateBeevesMetadata(message, sender){
     beeves_hotwords[message.beeves.hotword] = sender.id;
     browser.storage.local.set({beeves_hotwords}, function(){printStorage();});
   });
+  return Promise.resolve(true);
 }
 
 /** 
@@ -44,7 +53,7 @@ function updateBeevesMetadata(message, sender){
  */
 function printStorage(){
   browser.storage.local.get(['beeves_metadata', 'beeves_hotwords'], function(data){
-    log(data);
+    //console.log(data);
   });
 }
 
@@ -60,3 +69,14 @@ async function hotwordMapper(hotword){
   let dict = await browser.storage.local.get(['beeves_hotwords']);
   return dict.beeves_hotwords[hotword];
 }
+
+async function getBeevesMetadata(extensionID){
+  let beeves_metadata = await browser.storage.local.get(['beeves_metadata']);
+  let extension_metadata = beeves_metadata.beeves_metadata[extensionID];
+  return Promise.resolve(extension_metadata);
+}
+
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
