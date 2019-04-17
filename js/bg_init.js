@@ -1,5 +1,3 @@
-const postmanEndpoint = 'https://postman-echo.com/post';
-
 /**
  * handles initialization for beeves compatible webextensions
  * stores extension metadata (beeves.json) when the extension is loaded
@@ -20,13 +18,12 @@ browser.runtime.onInstalled.addListener(function(){
 browser.runtime.onMessageExternal.addListener(async function(message, sender){
   updateBeevesMetadata(message, sender);
   await timeout(1000);
-  trainNLUBackend(sender);
-  //flash 'new skill added' on agent
+  await trainNLUBackend(sender);
 });
 
 async function trainNLUBackend(sender){
   let snipsfile = (await getBeevesMetadata(sender.id))['snips'];
-  let res = await postData(`http://localhost:8337/skill/${sender.id}`, snipsfile);
+  let res = await putData(`http://localhost:8337/skill/${sender.id}`, snipsfile);
 }
 
 /** 
@@ -48,35 +45,5 @@ async function updateBeevesMetadata(message, sender){
   return Promise.resolve(true);
 }
 
-/** 
- * @description for testing only, displays metadata in local storage
- */
-function printStorage(){
-  browser.storage.local.get(['beeves_metadata', 'beeves_hotwords'], function(data){
-    //console.log(data);
-  });
-}
 
-/**
- * @param {string} hotword
- * @returns {Promise}
- * @description maps hotword (extension-specific trigger word, eg: 'arithmetic') to extension ID
- * @example
- *    await hotwordMapper('arithmetic')
- *    //-->arithmetic@beeves.com 
- */
-async function hotwordMapper(hotword){
-  let dict = await browser.storage.local.get(['beeves_hotwords']);
-  return dict.beeves_hotwords[hotword];
-}
-
-async function getBeevesMetadata(extensionID){
-  let beeves_metadata = await browser.storage.local.get(['beeves_metadata']);
-  let extension_metadata = beeves_metadata.beeves_metadata[extensionID];
-  return Promise.resolve(extension_metadata);
-}
-
-function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 

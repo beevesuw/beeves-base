@@ -7,7 +7,7 @@
   "manifest_version": 2,
   "name": "beeves_base",
   "version": "1.0",
-  "permissions": ["notifications", "*://0.0.0.0:8337/*", "*://postman-echo.com/*", "webRequest", "<all_urls>", "https://speaktome-2.services.mozilla.com/", "storage"],
+  "permissions": ["notifications", "*://0.0.0.0:8337/*", "webRequest", "<all_urls>", "https://speaktome-2.services.mozilla.com/", "storage"],
   "background": {
     "scripts": ["./js/bg_agent.js", "./js/bg_init.js", "./js/bg_utils.js", "./js/bg_dispatcher.js", "./js/class_BeevesRPC.js"]
   },
